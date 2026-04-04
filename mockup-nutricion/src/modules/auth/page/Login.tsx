@@ -1,7 +1,19 @@
-import React from 'react';
+
+import { React,useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Droplets, Mail, Lock, ArrowRight } from 'lucide-react';
 
 const Login = () => {
+
+  const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    alert('Login exitoso ✨');
+    navigate('/dashboard');
+
+  };
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 relative overflow-hidden">
       
@@ -22,7 +34,7 @@ const Login = () => {
             <p className="text-sky-600/70 text-sm mt-1 font-semibold uppercase tracking-widest">Portal de Nutrición</p>
           </div>
 
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             {/* Input Email */}
             <div className="group">
               <div className="relative">
@@ -51,10 +63,30 @@ const Login = () => {
             </div>
 
             {/* Botón con Degradado Vibrante */}
-            <button className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold py-4 rounded-2xl shadow-xl shadow-blue-500/20 flex items-center justify-center gap-3 transition-all transform active:scale-95 group">
-              Acceder al Panel
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
+          <button 
+  disabled={loading}
+  className={`
+    w-full flex items-center justify-center gap-3 py-4 rounded-2xl font-bold text-white transition-all transform 
+    bg-gradient-to-r from-cyan-500 to-blue-600 
+    hover:from-cyan-600 hover:to-blue-700 
+    shadow-xl shadow-blue-500/20 
+    active:scale-95 group
+    ${loading ? 'opacity-70 cursor-not-allowed scale-95' : 'hover:shadow-blue-500/40'}
+    ${loading ? 'animate-pulse' : ''} 
+  `}
+>
+  {loading ? (
+    <>
+      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+      <span>Cargando...</span>
+    </>
+  ) : (
+    <>
+      Acceder al Panel
+      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+    </>
+  )}
+</button>
           </form>
 
           {/* Registro */}
