@@ -1,17 +1,23 @@
 import React, { useState } from 'react';
-import { Sidebar } from './Sidebar';
-import { Header } from './Header';
+import { Header } from './Header'; // Tu componente Header
+import { Sidebar } from './Sidebar'; // Tu componente Sidebar
 
 const DashboardLayout = ({ children }) => {
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex overflow-hidden font-sans">
-      <Sidebar isOpen={isSidebarOpen} />
-      
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto transition-all duration-300">
-        <Header onToggle={() => setSidebarOpen(!isSidebarOpen)} />
-        <main className="flex-1 p-8">
+    <div className="flex min-h-screen bg-slate-50/50">
+      {/* SIDEBAR: Controlamos el ancho dinámicamente */}
+      <div className={`transition-all duration-300 ease-in-out ${isSidebarOpen ? 'w-72' : 'w-0 -ml-72 md:ml-0 md:w-20'}`}>
+        <Sidebar isOpen={isSidebarOpen} />
+      </div>
+
+      {/* CONTENIDO PRINCIPAL */}
+      <div className="flex-1 flex flex-col min-w-0">
+        <Header onToggle={toggleSidebar} />
+        <main className="p-6 overflow-x-hidden">
           {children}
         </main>
       </div>

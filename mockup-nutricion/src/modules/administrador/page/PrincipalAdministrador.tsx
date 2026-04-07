@@ -81,7 +81,7 @@ const PrincipalAdmin = () => {
                 <p className="text-slate-400 text-xs mb-6 leading-relaxed">
                   Gestiona permisos de nutriólogos, recepcionistas y auditoría de cambios.
                 </p>
-                <Link to="/admin/roles" className="block w-full bg-white/10 backdrop-blur-md border border-white/20 text-white py-3 rounded-2xl font-bold text-xs text-center hover:bg-white hover:text-slate-900 transition-all">
+                <Link to="/registrar-empleado" className="block w-full bg-white/10 backdrop-blur-md border border-white/20 text-white py-3 rounded-2xl font-bold text-xs text-center hover:bg-white hover:text-slate-900 transition-all">
                   Registro Personal
                 </Link>
               </div>
