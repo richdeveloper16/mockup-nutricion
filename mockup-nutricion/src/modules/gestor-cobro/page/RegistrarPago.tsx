@@ -1,7 +1,7 @@
-import React from 'react';
+
 import { 
-  CreditCard, User, FileText, ChevronLeft, 
-  Save, ShieldCheck, Tag, Info 
+   User, FileText, ChevronLeft, 
+   ShieldCheck, Tag 
 } from 'lucide-react';
 import DashboardLayout from '../../../components/layout/DashboardLayout';
 

@@ -7,6 +7,8 @@ import {
 } from 'lucide-react';
 import DashboardLayout from '../../../components/layout/DashboardLayout';
 import Alert from '../../../components/ui/Alert'; 
+
+
 const CrearCita = () => {
   const navigate = useNavigate();
   // Estado para simular la selección de tipo de cita
@@ -168,7 +170,7 @@ const CrearCita = () => {
                   <div className="relative group">
                     <FileText className="absolute left-5 top-5 text-slate-300 transition-transform group-focus-within:scale-110" size={20} />
                     <textarea 
-                      rows="2"
+                      rows={2}
                       placeholder="Ej. Seguimiento mensual, Control de peso..."
                       className="w-full pl-14 pr-6 py-4 bg-slate-50 border-none rounded-[1.8rem] text-sm font-bold focus:bg-white focus:ring-4 focus:ring-blue-100/50 transition-all shadow-inner resize-none"
                     ></textarea>

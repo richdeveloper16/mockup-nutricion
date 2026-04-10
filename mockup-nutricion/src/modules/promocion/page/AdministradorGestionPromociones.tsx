@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  Tag, Plus, Search, Flame, Percent, 
-  Calendar, Trash2, Edit3 
+  Tag, Plus, Search, Flame,   Trash2 
 } from 'lucide-react';
 import DashboardLayout from '../../../components/layout/DashboardLayout';
 

@@ -1,7 +1,6 @@
-import React from 'react';
+
 import { 
-  Search, Plus, Calendar, Users, 
-  Settings, Clock, CheckCircle2, 
+  Search, Plus, Calendar, 
   MoreVertical, UserPlus, FileText, Bell
 } from 'lucide-react';
 import { Link } from 'react-router-dom';

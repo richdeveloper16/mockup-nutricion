@@ -1,7 +1,7 @@
-import React from 'react';
+
 import { 
-  Apple, Calendar, Users, Activity, ChevronRight, 
-  Droplets, Utensils, UserPlus, Search 
+   Users, Activity, ChevronRight, 
+   Utensils, UserPlus
 } from 'lucide-react';
 import DashboardLayout from '../../../components/layout/DashboardLayout';
 import { Link } from 'react-router-dom';

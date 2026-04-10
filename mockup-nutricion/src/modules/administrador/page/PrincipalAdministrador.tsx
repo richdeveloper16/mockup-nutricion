@@ -1,9 +1,9 @@
-import React from 'react';
+
 import { Link } from 'react-router-dom';
 import { 
   Users, DollarSign, Tag, BarChart3, 
-  ArrowUpRight, UserPlus, FilePlus, 
-  Settings, Bell, Activity, Target
+  ArrowUpRight, UserPlus, 
+  Settings, Activity, Target
 } from 'lucide-react';
 import DashboardLayout from '../../../components/layout/DashboardLayout';
 

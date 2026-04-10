@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Flame, Clock, ChevronLeft, Download, Share2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom'; // Agregué esto para que el botón volver funcione
 import DashboardLayout from '../../../components/layout/DashboardLayout';
@@ -24,25 +24,7 @@ const handleShareWhatsApp = () => {
   window.open(whatsappUrl, '_blank');
 };
 
-const handleDownloadPDF = async () => {
-    const element = printRef.current;
-    const canvas = await html2canvas(element, {
-      scale: 2, // Mayor calidad
-      useCORS: true, // Para que cargue el logo si viene de una URL externa
-      logging: false,
-      backgroundColor: '#F8FAFC' // El color de fondo de tu app (slate-50)
-    });
 
-    const data = canvas.toDataURL('image/png');
-    const pdf = new jsPDF({
-      orientation: 'portrait',
-      unit: 'px',
-      format: [canvas.width, canvas.height]
-    });
-
-    pdf.addImage(data, 'PNG', 0, 0, canvas.width, canvas.height);
-    pdf.save("Dieta_NutriCloud_Paciente.pdf");
-  };
 
   return (
     <DashboardLayout>

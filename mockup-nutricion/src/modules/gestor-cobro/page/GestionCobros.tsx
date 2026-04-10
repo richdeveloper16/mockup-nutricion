@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { 
-  DollarSign, Search, Filter, Calendar, 
-  ArrowUpRight, ArrowDownLeft, MoreHorizontal,
-  FileText, CheckCircle2, Clock, AlertCircle
+  DollarSign, Search, ArrowDownLeft, MoreHorizontal, CheckCircle2, Clock, AlertCircle
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 

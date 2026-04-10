@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import { 
   Tag, Calendar, Percent, ChevronLeft, 
@@ -87,7 +87,7 @@ const CrearPromocion = () => {
                 <div className="relative group">
                   <FileText className="absolute left-5 top-6 text-slate-300 transition-transform group-focus-within:scale-110" size={20} />
                   <textarea 
-                    rows="3"
+                    rows={2}
                     placeholder="Escribe aquí los términos de la promoción..."
                     className="w-full pl-14 pr-6 py-5 bg-slate-50 border-none rounded-[1.8rem] text-sm font-bold focus:bg-white focus:ring-4 focus:ring-blue-100/50 transition-all shadow-inner resize-none"
                   ></textarea>

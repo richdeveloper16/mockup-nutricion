@@ -6,6 +6,8 @@ import {
 import DashboardLayout from '../../../components/layout/DashboardLayout';
 import { Link,useNavigate } from 'react-router-dom';
 import Alert from '../../../components/ui/Alert'; 
+import {InputGroupProps} from '../../../interfaces/IUI'; 
+
 
 const NutriologoRegistararPaciente = () => {
 const navigate = useNavigate();
@@ -29,7 +31,7 @@ const navigate = useNavigate();
     }, 1000);
   };
 
-const InputGroup = ({ label, icon: Icon, type = "text", placeholder }) => (
+const InputGroup = ({ label, icon: Icon, type = "text", placeholder }: InputGroupProps) => (
   <div className="space-y-2">
     <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">
       {label}

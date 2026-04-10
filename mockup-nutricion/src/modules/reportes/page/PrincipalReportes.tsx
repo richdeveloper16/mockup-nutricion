@@ -1,17 +1,20 @@
-import React from 'react';
+
 import { 
    PieChart,  Download, 
   Users, DollarSign, Calendar, TrendingUp, 
   ChevronRight, FileSpreadsheet, FilePieChart
 } from 'lucide-react';
 import DashboardLayout from '../../../components/layout/DashboardLayout';
+import { ICard } from '../../../interfaces/IUI';
+
 
 // --- Sub-componente: Tarjeta de Reporte ---
-const ReportCard = ({ title, description, icon: Icon, color, stats }) => (
+const ReportCard = ({ title, description, icon: Icon, color, stats }:ICard) => (
   <div className="bg-white p-8 rounded-[2.5rem] border border-blue-50 shadow-sm hover:shadow-xl hover:shadow-blue-100/50 transition-all group">
     <div className="flex justify-between items-start mb-6">
       <div className={`p-4 rounded-2xl ${color.bg} ${color.text}`}>
-        <Icon size={28} />
+        {Icon && <Icon size={28} />}
+       
       </div>
       <button className="p-2 text-slate-300 hover:text-blue-500 hover:bg-blue-50 rounded-xl transition-all">
         <Download size={20} />

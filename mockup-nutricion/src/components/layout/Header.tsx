@@ -1,7 +1,7 @@
-import React from 'react';
-import { Menu, X } from 'lucide-react';
 
-export const Header = ({ onToggle }) => (
+import { Menu } from 'lucide-react';
+import { Props } from '../../interfaces/IUI';
+export const Header = ({ onToggle }:Props) => (
   <header className="h-20 bg-white/80 backdrop-blur-md border-b border-blue-50 sticky top-0 z-40 px-8 flex items-center justify-between">
     <div className="flex items-center gap-4">
       {/* El botón ahora ejecuta la función que viene del padre */}

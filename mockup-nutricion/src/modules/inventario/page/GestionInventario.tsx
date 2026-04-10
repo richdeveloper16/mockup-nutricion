@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { 
   Package, Plus, Search, AlertTriangle, 
-  ArrowUpRight, BarChart2, Edit3, Trash2, 
+   BarChart2, Edit3, Trash2, 
   Archive, RefreshCw, ShoppingCart
 } from 'lucide-react';
 import DashboardLayout from '../../../components/layout/DashboardLayout';

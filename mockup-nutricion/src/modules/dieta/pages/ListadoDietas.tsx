@@ -1,5 +1,5 @@
-import React from 'react';
-import { Calendar, Apple, ChevronRight, Search, Filter, Plus } from 'lucide-react';
+
+import { Calendar, Apple, ChevronRight,  Plus } from 'lucide-react';
 import DashboardLayout from '../../../components/layout/DashboardLayout';
 
 const ListaDietas = () => {
@@ -57,3 +57,5 @@ const ListaDietas = () => {
     </DashboardLayout>
   );
 };
+
+export default ListaDietas;

@@ -5,11 +5,14 @@ import DashboardPage from '../modules/dashboard/page/Dashboard';
 
 /** Perfil Nutriologo */
 import PrincipalNutriologo from '../modules/nutriologo/page/PrincipalNutriologo';
-import NutriologoRegistararPaciente from '../modules/paciente/page/RegistararPaciente';
 
+/**Index */
+import IndexNutriCloud from '../modules/Landing/page/IndexNutriCloud';
 
 /** Perfil Paciente */
 import PrincipalPaciente from '../modules/paciente/page/PrincipalPaciente';
+import NutriologoRegistararPaciente from '../modules/paciente/page/RegistararPaciente';
+import HistorialMedidas from '../modules/paciente/page/HistoricoSeguimiento';
 
 /** Perfil Recepcionista */
 import PrincipalRecepcion from '../modules/recepcionista/page/PrincipalRecepcionista';
@@ -41,21 +44,29 @@ import CrearPromocion from '../modules/promocion/page/CrearPromocion';
 /** Modulo Dieta  */
 import CrearDieta from '../modules/dieta/pages/RegistrarDieta';
 import DetalleDieta from '../modules/dieta/pages/DetalleDieta';
+import ListaDietas from '../modules/dieta/pages/ListadoDietas';
+
+
 const AppRoutes: React.FC = () => {
     return (
         <Routes>
+
+
+               {/* Ruta  index */}
+            <Route path="/" element={<IndexNutriCloud />} />
             {/* Ruta principal */}
-            <Route path="/" element={<Login />} />
+ 
             <Route path="/login" element={<Login />} />
             <Route path="/dashboard" element={<DashboardPage />} />
 
             {/* Perfil Nutriologo */}
             <Route path="/perfil-nutriologo" element={<PrincipalNutriologo />} />
-            <Route path="/registrar-paciente" element={<NutriologoRegistararPaciente />} />
+           
             
             {/* Perfil Paciente  */}
             <Route path="/perfil-paciente" element={<PrincipalPaciente />} />
-
+ <Route path="/registrar-paciente" element={<NutriologoRegistararPaciente />} />
+  <Route path="/historico-medidas" element={<HistorialMedidas />} />
             {/* Perfil  Recepcionista */}
             <Route path="/recepcionista/perfil-recepcionista" element={<PrincipalRecepcion />} />
             <Route path="/recepcionista/nueva-cita" element={<CrearCita />} />
@@ -67,6 +78,7 @@ const AppRoutes: React.FC = () => {
              {/* Modulo DIeta */}
            <Route path="/crear-dieta" element={<CrearDieta />} />
           <Route path="/detalle-dieta" element={<DetalleDieta />} />
+          <Route path="//dieta/lista-dietas" element={<ListaDietas />} />
 
 
 /** Gestion Cobros */

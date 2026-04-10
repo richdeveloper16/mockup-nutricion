@@ -1,10 +1,13 @@
-import React from 'react';
+
 import { Link, useLocation } from 'react-router-dom';
 import { 
-  LayoutDashboard, User, Settings, 
-  LogOut, Droplets, BookText, ShieldCheck, 
-  UserCircle, Users2
+  LayoutDashboard, User, 
+  LogOut, Droplets, BookOpenCheck, ShieldCheck, 
+  UserCircle, Users2, WalletCards, Boxes, 
+  UserPlus, TicketPercent, Utensils
 } from 'lucide-react';
+
+import { SidebarProps } from '../../interfaces/IUI';
 
 const menuItems = [
   { icon: <LayoutDashboard size={22} />, label: 'Inicio', path: '/dashboard' },
@@ -12,15 +15,15 @@ const menuItems = [
   { icon: <User size={22} />, label: 'Perfil Recepcionista', path: '/recepcionista/perfil-recepcionista' },
   { icon: <UserCircle size={22} />, label: 'Perfil Paciente', path: '/perfil-paciente' },
   { icon: <ShieldCheck size={22} />, label: 'Administrador', path: '/perfil-administrador' },
-  { icon: <BookText size={22} />, label: 'Reportes', path: '/menu-reportes' },
-   { icon: <BookText size={22} />, label: 'Gestionar Cobros', path: '/gestionar-cobros' },
-   { icon: <BookText size={22} />, label: 'Gestionar Inventario', path: '/inventario/gestor' },
-    { icon: <BookText size={22} />, label: ' Empleado', path: '/peresonal/registro-empleado' },
-      { icon: <BookText size={22} />, label: ' Promociones', path: '/promocion/registrar-promociones' },
+  { icon: <BookOpenCheck size={22} />, label: 'Reportes', path: '/menu-reportes' },
+  { icon: <WalletCards size={22} />, label: 'Gestionar Cobros', path: '/gestionar-cobros' },
+  { icon: <Boxes size={22} />, label: 'Gestionar Inventario', path: '/inventario/gestor' },
+  { icon: <UserPlus size={22} />, label: 'Empleado', path: '/peresonal/registro-empleado' },
+  { icon: <TicketPercent size={22} />, label: 'Promociones', path: '/promocion/registrar-promociones' },
+  { icon: <Utensils size={22} />, label: 'Dietas', path: '/dieta/lista-dietas' },
 ];
 
-
-export const Sidebar = ({ isOpen }) => {
+export const Sidebar = ({ isOpen }:SidebarProps) => {
   const location = useLocation();
 
   return (
@@ -47,7 +50,7 @@ export const Sidebar = ({ isOpen }) => {
         </div>
 
         {/* Navigation List */}
-        <nav className="flex-1 space-y-2 overflow-y-auto no-scrollbar">
+        <nav className="flex-1 space-y-2 overflow-y-auto no-scrollbar px-1">
           {menuItems.map((item, i) => {
             const isActive = location.pathname === item.path;
 
@@ -62,10 +65,10 @@ export const Sidebar = ({ isOpen }) => {
                     ? 'bg-blue-50 text-blue-600 shadow-sm' 
                     : 'text-slate-500 hover:bg-slate-50 hover:text-blue-500'}
                 `}
-                title={!isOpen ? item.label : ""} // Tooltip cuando está cerrado
+                title={!isOpen ? item.label : ""}
               >
                 <div className="flex items-center gap-3">
-                  <span className={`transition-colors flex-shrink-0 ${isActive ? 'text-blue-600' : 'text-slate-400 group-hover:text-blue-500'}`}>
+                  <span className={`transition-all duration-200 flex-shrink-0 ${isActive ? 'text-blue-600 scale-110' : 'text-slate-400 group-hover:text-blue-500 group-hover:scale-110'}`}>
                     {item.icon}
                   </span>
                   {isOpen && (
@@ -75,9 +78,8 @@ export const Sidebar = ({ isOpen }) => {
                   )}
                 </div>
                 
-                {/* Indicador solo si está abierto y activo */}
                 {isOpen && isActive && (
-                  <div className="w-1.5 h-1.5 bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
+                  <div className="w-1.5 h-1.5 bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.6)]"></div>
                 )}
               </Link>
             );

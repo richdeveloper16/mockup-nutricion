@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { Header } from './Header'; // Tu componente Header
 import { Sidebar } from './Sidebar'; // Tu componente Sidebar
+import { LayoutProps } from '../../interfaces/IUI';
 
-const DashboardLayout = ({ children }) => {
+
+const DashboardLayout = ({ children }:LayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
