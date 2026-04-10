@@ -9,11 +9,16 @@ import {
 const menuItems = [
   { icon: <LayoutDashboard size={22} />, label: 'Inicio', path: '/dashboard' },
   { icon: <Users2 size={22} />, label: 'Perfil Nutriólogo', path: '/perfil-nutriologo' },
-  { icon: <User size={22} />, label: 'Perfil Recepcionista', path: '/perfil-recepcionista' },
+  { icon: <User size={22} />, label: 'Perfil Recepcionista', path: '/recepcionista/perfil-recepcionista' },
   { icon: <UserCircle size={22} />, label: 'Perfil Paciente', path: '/perfil-paciente' },
   { icon: <ShieldCheck size={22} />, label: 'Administrador', path: '/perfil-administrador' },
   { icon: <BookText size={22} />, label: 'Reportes', path: '/menu-reportes' },
+   { icon: <BookText size={22} />, label: 'Gestionar Cobros', path: '/gestionar-cobros' },
+   { icon: <BookText size={22} />, label: 'Gestionar Inventario', path: '/inventario/gestor' },
+    { icon: <BookText size={22} />, label: ' Empleado', path: '/peresonal/registro-empleado' },
+      { icon: <BookText size={22} />, label: ' Promociones', path: '/promocion/registrar-promociones' },
 ];
+
 
 export const Sidebar = ({ isOpen }) => {
   const location = useLocation();

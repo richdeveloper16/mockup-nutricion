@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
+import{ useState } from 'react';
 import { 
   Plus, Utensils, Trash2, Save, Apple, Info, 
   ChevronLeft, Moon, Sun, Coffee, Search, Flame
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import DashboardLayout from '../../../components/layout/DashboardLayout';
+import Alert from '../../../components/ui/Alert'; 
 
 const CrearDieta = () => {
+  const navigate = useNavigate();
+  
+  // --- ESTADOS PARA LA ALERTA ---
+  const [showAlert, setShowAlert] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
   // 1. Catálogo Maestro de Alimentos
   const catalogoAlimentos = [
     { 
@@ -24,13 +31,6 @@ const CrearDieta = () => {
         { nombre: "Avena en Hojuelas", kcal: 150, porcion: "1/2 taza", protein: 5, carbs: 27, fat: 2.5 },
         { nombre: "Quinoa Cocida", kcal: 120, porcion: "100g", protein: 4.4, carbs: 21, fat: 1.9 }
       ]
-    },
-    { 
-      grupo: "Grasas", 
-      opciones: [
-        { nombre: "Aguacate", kcal: 160, porcion: "100g", protein: 2, carbs: 8.5, fat: 14.7 },
-        { nombre: "Almendras", kcal: 170, porcion: "10 pzas", protein: 6, carbs: 6, fat: 14 }
-      ]
     }
   ];
 
@@ -43,7 +43,22 @@ const CrearDieta = () => {
     { id: 'cena', tiempo: "Cena", icon: Moon, items: [] }
   ]);
 
-  // 3. Lógica para manejar alimentos
+  // --- LÓGICA DE GUARDADO CON ALERTA ---
+  const handleAsignarPlan = () => {
+    setIsSaving(true);
+    
+    // Simulamos la petición al servidor
+    setTimeout(() => {
+      setIsSaving(false);
+      setShowAlert(true);
+      
+      // Esperamos a que la barra de la alerta termine (4s) para navegar
+      setTimeout(() => {
+        navigate('/perfil-nutriologo');
+      }, 4000);
+    }, 1000);
+  };
+
   const agregarFilaEdicion = (tiempoId) => {
     const nuevaFila = { id: Date.now(), isEditing: true, nombre: "", kcal: 0 };
     setDietaData(prev => prev.map(t => 
@@ -68,24 +83,45 @@ const CrearDieta = () => {
     ));
   };
 
-  // 4. Cálculos para el Sidebar
   const totalKcal = dietaData.reduce((acc, t) => acc + t.items.reduce((s, i) => s + i.kcal, 0), 0);
   const metaKcal = 2200;
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen bg-slate-50/50 p-4">
+      <div className="min-h-screen bg-slate-50/50 p-4 relative">
         
+      {/* MODAL ENVOLVENTE PARA ALERT.TSX (Efecto SweetAlert) */}
+        {showAlert && (
+          <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md animate-in fade-in duration-300">
+            <div className="w-full max-w-sm transform scale-110 shadow-2xl animate-in zoom-in-95 duration-300">
+              <Alert 
+                type="success_registration"
+                title="¡Plan Asignado!"
+                message="La dieta se ha guardado correctamente en la base de datos de NutriCloud."
+                onClose={() => setShowAlert(false)}
+              />
+            </div>
+          </div>
+        )}
+
         {/* Header Superior */}
         <header className="flex justify-between items-center mb-8">
           <div className="flex items-center gap-4">
-            <Link to="/nutriologo" className="p-3 bg-white rounded-2xl border border-slate-100 text-slate-400 hover:text-blue-600 transition-all shadow-sm">
+            <Link to="/perfil-nutriologo" className="p-3 bg-white rounded-2xl border border-slate-100 text-slate-400 hover:text-blue-600 transition-all shadow-sm">
               <ChevronLeft size={20} />
             </Link>
-            <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight italic">Diseño de Dieta</h1>
+            <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight italic">Diseño de <span className="text-blue-600">Dieta</span></h1>
           </div>
-          <button className="px-8 py-4 bg-blue-600 text-white font-black text-xs rounded-2xl shadow-xl shadow-blue-200 hover:bg-blue-700 transition-all flex items-center gap-2 uppercase tracking-widest">
-            <Save size={18} /> Asignar Plan
+          
+          <button 
+            onClick={handleAsignarPlan}
+            disabled={isSaving}
+            className={`px-8 py-4 bg-blue-600 text-white font-black text-xs rounded-2xl shadow-xl shadow-blue-200 transition-all flex items-center gap-2 uppercase tracking-widest active:scale-95 ${isSaving ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'}`}
+          >
+            {isSaving ? (
+              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : <Save size={18} />}
+            {isSaving ? 'Guardando...' : 'Asignar Plan'}
           </button>
         </header>
 
@@ -166,25 +202,8 @@ const CrearDieta = () => {
             ))}
           </main>
 
-          {/* SIDEBAR: BÚSQUEDA Y CALORÍAS */}
+          {/* SIDEBAR: CALORÍAS */}
           <aside className="space-y-6">
-            {/* Tarjeta Búsqueda Paciente */}
-            <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-blue-50">
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Asignar a:</p>
-              <div className="relative mb-4">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
-                <input type="text" placeholder="Buscar paciente..." className="w-full pl-11 pr-4 py-3 bg-slate-50 border-none rounded-2xl text-sm font-bold focus:bg-white focus:ring-2 focus:ring-blue-100 transition-all shadow-inner" />
-              </div>
-              <div className="flex items-center gap-4 p-4 bg-blue-50/50 rounded-3xl border border-blue-100">
-                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-blue-500 shadow-sm"><Search size={24} /></div>
-                <div>
-                  <p className="text-sm font-black text-slate-800">Seleccionar Paciente</p>
-                  <p className="text-[10px] font-bold text-blue-400 uppercase">Sin asignar</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Tarjeta Calorías */}
             <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-blue-50 sticky top-10">
               <div className="text-center p-8 bg-blue-600 rounded-[2rem] shadow-xl shadow-blue-100 mb-8 overflow-hidden relative group">
                 <Flame className="absolute -right-4 -bottom-4 w-24 h-24 text-white/10 group-hover:scale-110 transition-transform" />
@@ -210,7 +229,6 @@ const CrearDieta = () => {
               </div>
             </div>
           </aside>
-
         </div>
       </div>
     </DashboardLayout>

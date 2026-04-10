@@ -1,31 +1,51 @@
-
-import { React,useState } from 'react';
+import React, { useState } from 'react'; // Corregido el import de React
 import { useNavigate } from 'react-router-dom';
 import { Droplets, Mail, Lock, ArrowRight } from 'lucide-react';
+import Alert from '../../../components/ui/Alert';
 
 const Login = () => {
-
   const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
- const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [loading, setLoading] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    alert('Login exitoso ✨');
-    navigate('/dashboard');
-
+    
+    // Simulamos una carga y mostramos la alerta
+    setTimeout(() => {
+      setLoading(false);
+      setShowAlert(true);
+      
+      // Navegamos después de que la alerta haya hecho su trabajo
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 3000); 
+    }, 1000);
   };
+
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 relative overflow-hidden">
       
-      {/* Elementos decorativos con degradados suaves (Background) */}
+      {/* Sistema de Alertas Flotante */}
+      {showAlert && (
+        <div className="fixed top-8 right-8 z-[100] w-full max-w-sm">
+          <Alert 
+            type="success"
+            title="Acceso Autorizado"
+            message="¡Bienvenido de nuevo! Redirigiendo a tu panel de control..."
+            onClose={() => setShowAlert(false)}
+          />
+        </div>
+      )}
+
+      {/* Decoración de fondo */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-gradient-to-br from-blue-200 to-cyan-100 rounded-full blur-[100px] opacity-60"></div>
       <div className="absolute bottom-[-5%] right-[-5%] w-[30%] h-[30%] bg-gradient-to-tr from-sky-200 to-blue-50 rounded-full blur-[80px] opacity-50"></div>
 
       <div className="w-full max-w-md z-10">
-        {/* Card con borde degradado sutil */}
         <div className="bg-white/80 backdrop-blur-2xl p-10 rounded-[3rem] shadow-[0_20px_50px_rgba(186,230,253,0.3)] border border-white/50">
           
-          {/* Header con Icono en Degradado */}
           <div className="flex flex-col items-center mb-12">
             <div className="w-20 h-20 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-3xl flex items-center justify-center shadow-lg shadow-blue-200 mb-5 transform rotate-3 hover:rotate-0 transition-transform duration-300">
               <Droplets className="text-white w-10 h-10" />
@@ -35,24 +55,24 @@ const Login = () => {
           </div>
 
           <form className="space-y-6" onSubmit={handleSubmit}>
-            {/* Input Email */}
             <div className="group">
               <div className="relative">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-sky-500 transition-colors" />
                 <input 
                   type="email" 
+                  required
                   placeholder="Tu correo electrónico"
                   className="w-full pl-12 pr-4 py-4 bg-slate-50/50 border border-slate-100 rounded-2xl outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-400 transition-all placeholder:text-slate-400"
                 />
               </div>
             </div>
 
-            {/* Input Password */}
             <div className="group">
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-sky-500 transition-colors" />
                 <input 
                   type="password" 
+                  required
                   placeholder="Tu contraseña"
                   className="w-full pl-12 pr-4 py-4 bg-slate-50/50 border border-slate-100 rounded-2xl outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-400 transition-all placeholder:text-slate-400"
                 />
@@ -62,34 +82,28 @@ const Login = () => {
               </div>
             </div>
 
-            {/* Botón con Degradado Vibrante */}
-          <button 
-  disabled={loading}
-  className={`
-    w-full flex items-center justify-center gap-3 py-4 rounded-2xl font-bold text-white transition-all transform 
-    bg-gradient-to-r from-cyan-500 to-blue-600 
-    hover:from-cyan-600 hover:to-blue-700 
-    shadow-xl shadow-blue-500/20 
-    active:scale-95 group
-    ${loading ? 'opacity-70 cursor-not-allowed scale-95' : 'hover:shadow-blue-500/40'}
-    ${loading ? 'animate-pulse' : ''} 
-  `}
->
-  {loading ? (
-    <>
-      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-      <span>Cargando...</span>
-    </>
-  ) : (
-    <>
-      Acceder al Panel
-      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-    </>
-  )}
-</button>
+            <button 
+              disabled={loading}
+              className={`
+                w-full flex items-center justify-center gap-3 py-4 rounded-2xl font-bold text-white transition-all transform 
+                bg-gradient-to-r from-cyan-500 to-blue-600 
+                hover:from-cyan-600 hover:to-blue-700 
+                shadow-xl shadow-blue-500/20 
+                active:scale-95 group
+                ${loading ? 'opacity-70 cursor-not-allowed scale-95' : 'hover:shadow-blue-500/40'}
+              `}
+            >
+              {loading ? (
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              ) : (
+                <>
+                  Acceder al Panel
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </>
+              )}
+            </button>
           </form>
 
-          {/* Registro */}
           <div className="mt-10 pt-6 border-t border-slate-100 text-center">
             <p className="text-sm text-slate-500">
               ¿No tienes cuenta? 

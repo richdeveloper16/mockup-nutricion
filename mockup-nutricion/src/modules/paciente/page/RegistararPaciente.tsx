@@ -1,12 +1,34 @@
-import React from 'react';
+import{ useState } from 'react';
 import { 
-  User, Mail, Phone, Calendar, 
-  Scale, Ruler, Target, AlertCircle,
-  Save, Activity, Zap, Droplet
+  User,Calendar,  AlertCircle,
+  Save, Activity, Zap, Droplet,ChevronLeft
 } from 'lucide-react';
 import DashboardLayout from '../../../components/layout/DashboardLayout';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
+import Alert from '../../../components/ui/Alert'; 
+
 const NutriologoRegistararPaciente = () => {
+const navigate = useNavigate();
+  // --- ESTADOS PARA LA ALERTA ---
+  const [showAlert, setShowAlert] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  // --- LÓGICA DE GUARDADO  ---
+  const handleAsignarPlan = () => {
+    setIsSaving(true);
+    
+    // Simulamos la petición al servidor
+    setTimeout(() => {
+      setIsSaving(false);
+      setShowAlert(true);
+      
+      // Esperamos a que la barra de la alerta termine (4s) para navegar
+      setTimeout(() => {
+        navigate('/perfil-nutriologo');
+      }, 4000);
+    }, 1000);
+  };
+
 const InputGroup = ({ label, icon: Icon, type = "text", placeholder }) => (
   <div className="space-y-2">
     <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">
@@ -27,17 +49,52 @@ const InputGroup = ({ label, icon: Icon, type = "text", placeholder }) => (
   return (
     <DashboardLayout>
     <div className="min-h-screen bg-slate-50/30 p-4 font-sans">
+          {/* MODAL ENVOLVENTE PARA ALERT.TSX (Efecto SweetAlert) */}
+        {showAlert && (
+          <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md animate-in fade-in duration-300">
+            <div className="w-full max-w-sm transform scale-110 shadow-2xl animate-in zoom-in-95 duration-300">
+              <Alert 
+                type="success_registration"
+                title="¡Plan Asignado!"
+                message="La dieta se ha guardado correctamente en la base de datos de NutriCloud."
+                onClose={() => setShowAlert(false)}
+              />
+            </div>
+          </div>
+        )}
         
         {/* Header */}
-        <header className="flex justify-between items-center mb-10">
-          <div>
-            <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">Registro Clínico</h1>
-            <p className="text-slate-500 font-medium">Expediente digital y métricas InBody</p>
-          </div>
-          <button className="px-8 py-3 bg-blue-600 text-white font-bold rounded-2xl flex items-center gap-2 hover:bg-blue-700 shadow-lg shadow-blue-200 active:scale-95 transition-all">
-            <Save size={18} /> Guardar Expediente
-          </button>
-        </header>
+       <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
+  <div className="flex items-center gap-5">
+    {/* Botón de Retroceso mejorado */}
+    <Link 
+      to="/perfil-nutriologo" 
+      className="p-4 bg-white rounded-[1.2rem] border border-slate-100 text-slate-400 hover:text-blue-600 hover:border-blue-100 transition-all shadow-sm active:scale-90 flex items-center justify-center"
+    >
+      <ChevronLeft size={22} />
+    </Link>
+
+    {/* Títulos alineados */}
+    <div>
+      <h1 className="text-3xl font-black text-slate-800 tracking-tight italic">
+        Registro <span className="text-blue-600">Clínico</span>
+      </h1>
+      <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">Expediente digital y métricas InBody</p>
+    </div>
+  </div>
+
+  {/* Botón Guardar con degradado y sombra NutriCloud */}
+   <button 
+             onClick={handleAsignarPlan}
+             disabled={isSaving}
+             className={`px-8 py-4 bg-blue-600 text-white font-black text-xs rounded-2xl shadow-xl shadow-blue-200 transition-all flex items-center gap-2 uppercase tracking-widest active:scale-95 ${isSaving ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'}`}
+           >
+             {isSaving ? (
+               <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+             ) : <Save size={18} />}
+             {isSaving ? 'Guardando...' : 'Asignar Plan'}
+           </button>
+</header>
 
         <main className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           

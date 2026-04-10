@@ -102,7 +102,7 @@ const PrincipalRecepcion = () => {
               <h3 className="text-2xl font-bold mb-2">Agendar Cita</h3>
               <p className="text-blue-50 text-sm mb-8 opacity-90">Asigna un espacio en la agenda de forma rápida.</p>
               <Link 
-                to="/recepcion/nueva-cita" 
+                to="/recepcionista/nueva-cita" 
                 className="block w-full bg-white text-blue-600 py-4 rounded-2xl font-black text-sm text-center hover:bg-blue-50 transition-all shadow-lg shadow-blue-900/10 active:scale-95"
               >
                 NUEVA CITA
@@ -117,7 +117,7 @@ const PrincipalRecepcion = () => {
               </h3>
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { label: 'Registrar Paciente', icon: <UserPlus size={18} />, path: '/recepcion/registrar' },
+                  { label: 'Registrar Paciente', icon: <UserPlus size={18} />, path: '/registrar-paciente' },
                   { label: 'Ver Agenda', icon: <Calendar size={18} />, path: '/recepcion/agenda' },
                   { label: 'Pagos / Caja', icon: <FileText size={18} />, path: '/recepcion/pagos' },
                   { label: 'Notificar', icon: <Bell size={18} />, path: '/recepcion/notificar' },

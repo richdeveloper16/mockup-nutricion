@@ -103,7 +103,7 @@ const PrincipalPaciente = () => {
               <p className="text-blue-50 text-sm mb-6 max-w-md opacity-90 leading-relaxed">
                 Recuerda beber dos vasos de agua antes de iniciar para mejorar la digestión.
               </p>
-              <Link to="/receta-completa" className="inline-block bg-white text-blue-600 px-6 py-3 rounded-2xl font-extrabold text-sm hover:bg-blue-50 transition-all shadow-md active:scale-95">
+              <Link to="/detalle-dieta" className="inline-block bg-white text-blue-600 px-6 py-3 rounded-2xl font-extrabold text-sm hover:bg-blue-50 transition-all shadow-md active:scale-95">
                 Ver Receta Completa
               </Link>
             </div>
