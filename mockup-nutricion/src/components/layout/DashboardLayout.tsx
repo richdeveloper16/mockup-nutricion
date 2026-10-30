@@ -5,14 +5,15 @@ import { LayoutProps } from '../../interfaces/IUI';
 
 
 const DashboardLayout = ({ children }:LayoutProps) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => window.innerWidth >= 1024);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   return (
     <div className="flex min-h-screen bg-slate-50/50">
       {/* SIDEBAR: Controlamos el ancho dinámicamente */}
-      <div className={`transition-all duration-300 ease-in-out ${isSidebarOpen ? 'w-72' : 'w-0 -ml-72 md:ml-0 md:w-20'}`}>
+      <div className={`transition-all duration-300 ease-in-out ${isSidebarOpen ? 'w-0 lg:w-72' : 'w-0 lg:w-20'}`}>
+        {isSidebarOpen && <button aria-label="Cerrar menú" className="fixed inset-0 bg-slate-900/30 z-40 lg:hidden" onClick={toggleSidebar}/>}
         <Sidebar isOpen={isSidebarOpen} />
       </div>
 

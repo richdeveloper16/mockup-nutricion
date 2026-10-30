@@ -1,4 +1,5 @@
 
+import { getRole, clearSession } from '../../modules/auth/session';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, User, 
@@ -26,6 +27,17 @@ const menuItems = [
 export const Sidebar = ({ isOpen }:SidebarProps) => {
   const location = useLocation();
 
+  const patientMenu = [
+    { icon: <LayoutDashboard size={22}/>, label: 'Inicio', path: '/dashboard' },
+    { icon: <UserCircle size={22}/>, label: 'Mi perfil', path: '/perfil-paciente' },
+    { icon: <BookOpenCheck size={22}/>, label: 'Mis consultas', path: '/dashboard?view=consultas' },
+    { icon: <Utensils size={22}/>, label: 'Mi plan alimenticio', path: '/dashboard?view=plan' },
+    { icon: <BookOpenCheck size={22}/>, label: 'Mi progreso', path: '/dashboard?view=progreso' },
+    { icon: <BookOpenCheck size={22}/>, label: 'Mis documentos', path: '/dashboard?view=documentos' },
+    { icon: <User size={22}/>, label: 'Mensajes', path: '/dashboard?view=mensajes' },
+  ];
+  const employeeMenu = [menuItems[0], { icon: <Users2 size={22}/>, label: 'Pacientes', path: '/registrar-paciente' }, { icon: <BookOpenCheck size={22}/>, label: 'Citas y agenda', path: '/recepcionista/nueva-cita' }, ...menuItems.slice(1).filter(item => item.path !== '/perfil-paciente')];
+  const visibleItems = getRole() === 'paciente' ? patientMenu : employeeMenu;
   return (
     <aside 
       className={`
@@ -51,8 +63,8 @@ export const Sidebar = ({ isOpen }:SidebarProps) => {
 
         {/* Navigation List */}
         <nav className="flex-1 space-y-2 overflow-y-auto no-scrollbar px-1">
-          {menuItems.map((item, i) => {
-            const isActive = location.pathname === item.path;
+          {visibleItems.map((item, i) => {
+            const isActive = location.pathname + location.search === item.path;
 
             return (
               <Link 
@@ -89,7 +101,7 @@ export const Sidebar = ({ isOpen }:SidebarProps) => {
         {/* Footer - Cerrar Sesión */}
         <div className="pt-6 border-t border-slate-50">
           <Link 
-            to="/login" 
+            to="/login" onClick={clearSession} 
             className={`flex items-center gap-3 p-4 text-slate-400 hover:text-red-500 transition-colors font-black text-xs uppercase tracking-widest group ${!isOpen && 'justify-center'}`}
           >
             <LogOut size={20} className="group-hover:-translate-x-1 transition-transform flex-shrink-0" /> 

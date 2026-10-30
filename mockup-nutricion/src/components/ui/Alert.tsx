@@ -1,84 +1,24 @@
-import  { useEffect, useState } from 'react';
-import { CheckCircle2, XCircle } from 'lucide-react'; // Importamos XCircle
-import { IToastProps } from '../../interfaces/IUI';
+﻿import { useId } from 'react';
+import { createPortal } from 'react-dom';
+import { Check, CircleAlert, Info, TriangleAlert, X } from 'lucide-react';
+import type { IToastProps } from '../../interfaces/IUI';
 
-// 1. Extraemos 'type' de las props
-const AlertSweet = ({ title, message, onClose, type, duration = 4000 }: IToastProps) => {
-  const [progress, setProgress] = useState(100);
-
-  // 2. Ahora 'type' ya existe y podemos usarlo
-  const isError = type === 'error';
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((prev) => Math.max(0, prev - (100 / (duration / 10))));
-    }, 10);
-    return () => clearInterval(timer);
-  }, [duration]);
-
-  return (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-300">
-      
-      <div className="relative bg-white w-full max-w-sm rounded-[3rem] p-8 shadow-2xl border border-white flex flex-col items-center text-center animate-in zoom-in-95 duration-300 ease-out shadow-blue-200/50">
-        
-        {/* Icono Principal Dinámico */}
-        <div className={`w-20 h-20 ${isError ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600'} rounded-full flex items-center justify-center mb-6 relative transition-colors duration-500`}>
-          {isError ? (
-            <XCircle size={40} strokeWidth={2.5} />
-          ) : (
-            <CheckCircle2 size={40} strokeWidth={2.5} />
-          )}
-          {/* Ping animation dinámico */}
-          <div className={`absolute inset-0 ${isError ? 'bg-red-400' : 'bg-blue-400'} rounded-full animate-ping opacity-20`}></div>
-        </div>
-
-        <div className="space-y-2 mb-8">
-          <h3 className="text-2xl font-black text-slate-800 tracking-tight italic">
-            {title}
-          </h3>
-          <p className="text-slate-500 font-bold text-sm leading-relaxed">
-            {message}
-          </p>
-        </div>
-
-        <button 
-          onClick={onClose}
-          className={`w-full py-4 ${isError ? 'bg-red-600 hover:bg-red-700 shadow-red-200' : 'bg-blue-600 hover:bg-blue-700 shadow-blue-200'} text-white font-black rounded-2xl shadow-lg transition-all active:scale-95 uppercase tracking-widest text-xs mb-6`}
-        >
-          Entendido
-        </button>
-
-        {/* BARRA DE ESTADO (Color dinámico según el tipo) */}
-        <div className="w-full space-y-2 bg-slate-50/50 p-4 rounded-[1.5rem] border border-slate-100 shadow-inner">
-          <div className="flex justify-between items-center mb-1">
-            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Autocierre</span>
-            <span className={`text-[9px] font-black ${isError ? 'text-red-500' : 'text-blue-500'}`}>
-              {Math.ceil((progress * duration) / 10000)}s
-            </span>
-          </div>
-          
-          <div className="relative h-3 w-full bg-white rounded-full p-0.5 shadow-sm border border-slate-100 overflow-hidden">
-            <div 
-              className="h-full rounded-full transition-all duration-75 ease-linear relative"
-              style={{ 
-                width: `${progress}%`,
-                background: isError 
-                  ? 'linear-gradient(90deg, #ef4444 0%, #f87171 100%)' 
-                  : 'linear-gradient(90deg, #3b82f6 0%, #22d3ee 100%)',
-                boxShadow: isError 
-                  ? '0 0 10px rgba(239, 68, 68, 0.3)' 
-                  : '0 0 10px rgba(34, 211, 238, 0.3)'
-              }}
-            >
-              <div className="absolute top-0 left-0 w-full h-[40%] bg-white/20 rounded-full"></div>
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-white rounded-full blur-[1px] mr-0.5 shadow-[0_0_5px_#fff]"></div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  );
+const styles = {
+  success: { icon: Check, color: 'bg-emerald-50 text-emerald-600', label: 'Todo listo' },
+  success_registration: { icon: Check, color: 'bg-emerald-50 text-emerald-600', label: 'Todo listo' },
+  error: { icon: CircleAlert, color: 'bg-rose-50 text-rose-600', label: 'Revisa este detalle' },
+  warning: { icon: TriangleAlert, color: 'bg-amber-50 text-amber-600', label: 'Ten en cuenta' },
+  info: { icon: Info, color: 'bg-sky-50 text-sky-600', label: 'Para ti' },
 };
 
-export default AlertSweet;
+export default function Alert({ title, message, onClose, type = 'success' }: IToastProps) {
+  const id = useId();
+  const { icon: Icon, color, label } = styles[type];
+  return createPortal(
+    <section role={type === 'error' || type === 'warning' ? 'alert' : 'status'} aria-labelledby={id} className="fixed bottom-5 right-5 left-5 sm:left-auto z-[10000] sm:w-[400px] flex items-start gap-3 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-[0_12px_45px_-12px_rgba(15,23,42,0.25)]">
+      <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${color}`}><Icon size={23} strokeWidth={2}/></span>
+      <div className="min-w-0 flex-1"><p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">{label}</p><h3 id={id} className="text-sm font-semibold text-slate-800">{title}</h3><p className="mt-1 text-sm leading-relaxed text-slate-500">{message}</p></div>
+      <button type="button" onClick={onClose} aria-label="Cerrar notificación" className="-mr-1 -mt-1 rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-2 focus-visible:outline-sky-500"><X size={17}/></button>
+    </section>, document.body,
+  );
+}

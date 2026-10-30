@@ -1,43 +1,24 @@
 import React, { useState } from 'react'; // Corregido el import de React
 import { useNavigate } from 'react-router-dom';
 import { Droplets, Mail, Lock, ArrowRight } from 'lucide-react';
-import Alert from '../../../components/ui/Alert';
+import { setRole, type Role } from '../session';
 
 const Login = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
+  const [role, selectRole] = useState<Role>('paciente');
+  const loading = false;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
-    
-    // Simulamos una carga y mostramos la alerta
-    setTimeout(() => {
-      setLoading(false);
-      setShowAlert(true);
-      
-      // Navegamos después de que la alerta haya hecho su trabajo
-      setTimeout(() => {
-        navigate('/dashboard');
-      }, 3000); 
-    }, 1000);
+    setRole(role);
+    navigate('/dashboard', { state: { notice: { title: 'Bienvenido de nuevo', message: 'Tu espacio está listo. Qué gusto tenerte aquí.' } } });
   };
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 relative overflow-hidden">
       
       {/* Sistema de Alertas Flotante */}
-      {showAlert && (
-        <div className="fixed top-8 right-8 z-[100] w-full max-w-sm">
-          <Alert 
-            type="success"
-            title="Acceso Autorizado"
-            message="¡Bienvenido de nuevo! Redirigiendo a tu panel de control..."
-            onClose={() => setShowAlert(false)}
-          />
-        </div>
-      )}
+      
 
       {/* Decoración de fondo */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-gradient-to-br from-blue-200 to-cyan-100 rounded-full blur-[100px] opacity-60"></div>
@@ -54,12 +35,15 @@ const Login = () => {
             <p className="text-sky-600/70 text-sm mt-1 font-semibold uppercase tracking-widest">Portal de Nutrición</p>
           </div>
 
+          <div className="grid grid-cols-2 gap-3 mb-6" role="group" aria-label="Tipo de acceso">
+            {(['paciente', 'empleado'] as const).map(value => <button key={value} type="button" aria-pressed={role === value} onClick={() => selectRole(value)} className={`p-4 rounded-2xl border-2 font-bold transition ${role === value ? 'border-sky-500 bg-sky-50 text-sky-700' : 'border-slate-100 text-slate-500'}`}>{value === 'paciente' ? 'Soy paciente' : 'Soy empleado'}</button>)}
+          </div>
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="group">
               <div className="relative">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-sky-500 transition-colors" />
                 <input 
-                  type="text" 
+                  type="email" name="email" aria-label="Correo electrónico" autoComplete="username" 
                   required
                   placeholder="Tu correo electrónico"
                   className="w-full pl-12 pr-4 py-4 bg-slate-50/50 border border-slate-100 rounded-2xl outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-400 transition-all placeholder:text-slate-400"
@@ -71,7 +55,7 @@ const Login = () => {
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-sky-500 transition-colors" />
                 <input 
-                  type="password" 
+                  type="password" name="password" aria-label="Contraseña" autoComplete="current-password" 
                   required
                   placeholder="Tu contraseña"
                   className="w-full pl-12 pr-4 py-4 bg-slate-50/50 border border-slate-100 rounded-2xl outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-400 transition-all placeholder:text-slate-400"
@@ -97,7 +81,7 @@ const Login = () => {
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
                 <>
-                  Acceder al Panel
+                  Ingresar como {role}
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </>
               )}
@@ -106,8 +90,8 @@ const Login = () => {
 
           <div className="mt-10 pt-6 border-t border-slate-100 text-center">
             <p className="text-sm text-slate-500">
-              ¿No tienes cuenta? 
-              <span className="ml-1 font-bold text-sky-600 cursor-pointer hover:underline">Solicitar acceso</span>
+              Acceso de demostración. 
+              <span className="ml-1 font-bold text-sky-600">Usa un correo válido y cualquier contraseña</span>
             </p>
           </div>
         </div>

@@ -1,3 +1,4 @@
+import RouteNotice from '../components/ui/RouteNotice';
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Login from '../modules/auth/page/Login';
@@ -49,6 +50,8 @@ import ListaDietas from '../modules/dieta/pages/ListadoDietas';
 
 const AppRoutes: React.FC = () => {
     return (
+        <>
+        <RouteNotice />
         <Routes>
 
 
@@ -78,7 +81,7 @@ const AppRoutes: React.FC = () => {
              {/* Modulo DIeta */}
            <Route path="/crear-dieta" element={<CrearDieta />} />
           <Route path="/detalle-dieta" element={<DetalleDieta />} />
-          <Route path="//dieta/lista-dietas" element={<ListaDietas />} />
+          <Route path="/dieta/lista-dietas" element={<ListaDietas />} />
 
 
 /** Gestion Cobros */
@@ -97,6 +100,7 @@ const AppRoutes: React.FC = () => {
 
             <Route path="/menu-reportes" element={<PantallaReportes />} />
         </Routes>
+        </>
     );
 };
 

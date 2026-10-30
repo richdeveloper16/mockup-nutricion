@@ -6,7 +6,6 @@ import {
   Search, Video, MapPin 
 } from 'lucide-react';
 import DashboardLayout from '../../../components/layout/DashboardLayout';
-import Alert from '../../../components/ui/Alert'; 
 
 
 const CrearCita = () => {
@@ -15,41 +14,18 @@ const CrearCita = () => {
   const [tipoCita, setTipoCita] = useState('presencial');
 
     // --- ESTADOS PARA LA ALERTA ---
-  const [showAlert, setShowAlert] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
+  const isSaving = false;
 
   // --- LÓGICA DE GUARDADO CON ALERTA ---
   const handleAsignarPlan = () => {
-    setIsSaving(true);
-    
-    // Simulamos la petición al servidor
-    setTimeout(() => {
-      setIsSaving(false);
-      setShowAlert(true);
-      
-      // Esperamos a que la barra de la alerta termine (4s) para navegar
-      setTimeout(() => {
-        navigate('/recepcionista/perfil-recepcionista');
-      }, 4000);
-    }, 1000);
+    navigate('/recepcionista/perfil-recepcionista', { state: { notice: { title: 'Cita registrada', message: 'La cita quedó registrada en esta demostración.' } } });
   };
 
   return (
     <DashboardLayout>
       <div className="min-h-screen bg-slate-50/30 p-6 font-sans">
             {/* MODAL ENVOLVENTE PARA ALERT.TSX (Efecto SweetAlert) */}
-        {showAlert && (
-          <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md animate-in fade-in duration-300">
-            <div className="w-full max-w-sm transform scale-110 shadow-2xl animate-in zoom-in-95 duration-300">
-              <Alert 
-                type="success_registration"
-                title="¡Cita Asignada!"
-                message="La cita se ha guardado correctamente en la base de datos de NutriCloud."
-                onClose={() => setShowAlert(false)}
-              />
-            </div>
-          </div>
-        )}
+        
         {/* Header de Navegación - Mismo estilo que CrearPromocion */}
         <div className="max-w-4xl mx-auto mb-8 flex items-center justify-between gap-4 flex-wrap">
           <div className="flex items-center gap-4">

@@ -1,34 +1,20 @@
-import{ useState } from 'react';
 import { 
   User,Calendar,  AlertCircle,
   Save, Activity, Zap, Droplet,ChevronLeft
 } from 'lucide-react';
 import DashboardLayout from '../../../components/layout/DashboardLayout';
 import { Link,useNavigate } from 'react-router-dom';
-import Alert from '../../../components/ui/Alert'; 
 import {InputGroupProps} from '../../../interfaces/IUI'; 
 
 
 const NutriologoRegistararPaciente = () => {
 const navigate = useNavigate();
   // --- ESTADOS PARA LA ALERTA ---
-  const [showAlert, setShowAlert] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
+  const isSaving = false;
 
   // --- LÓGICA DE GUARDADO  ---
   const handleAsignarPlan = () => {
-    setIsSaving(true);
-    
-    // Simulamos la petición al servidor
-    setTimeout(() => {
-      setIsSaving(false);
-      setShowAlert(true);
-      
-      // Esperamos a que la barra de la alerta termine (4s) para navegar
-      setTimeout(() => {
-        navigate('/perfil-nutriologo');
-      }, 4000);
-    }, 1000);
+    navigate('/perfil-nutriologo', { state: { notice: { title: 'Paciente registrado', message: 'El registro se completó en esta demostración.' } } });
   };
 
 const InputGroup = ({ label, icon: Icon, type = "text", placeholder }: InputGroupProps) => (
@@ -52,18 +38,7 @@ const InputGroup = ({ label, icon: Icon, type = "text", placeholder }: InputGrou
     <DashboardLayout>
     <div className="min-h-screen bg-slate-50/30 p-4 font-sans">
           {/* MODAL ENVOLVENTE PARA ALERT.TSX (Efecto SweetAlert) */}
-        {showAlert && (
-          <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md animate-in fade-in duration-300">
-            <div className="w-full max-w-sm transform scale-110 shadow-2xl animate-in zoom-in-95 duration-300">
-              <Alert 
-                type="success_registration"
-                title="¡Plan Asignado!"
-                message="La dieta se ha guardado correctamente en la base de datos de NutriCloud."
-                onClose={() => setShowAlert(false)}
-              />
-            </div>
-          </div>
-        )}
+        
         
         {/* Header */}
        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">

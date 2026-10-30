@@ -5,15 +5,13 @@ import {
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import DashboardLayout from '../../../components/layout/DashboardLayout';
-import Alert from '../../../components/ui/Alert'; 
 import { IAlimento, ITiempoComida } from '../../../interfaces/IIndex'; 
 
 const CrearDieta = () => {
   const navigate = useNavigate();
   
   // --- ESTADOS PARA LA ALERTA ---
-  const [showAlert, setShowAlert] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
+  const isSaving = false;
 
   // 1. Catálogo Maestro de Alimentos (Tipado para evitar errores en el parse)
   const catalogoAlimentos = [
@@ -46,12 +44,7 @@ const CrearDieta = () => {
 
   // --- LÓGICA DE GUARDADO ---
   const handleAsignarPlan = () => {
-    setIsSaving(true);
-    setTimeout(() => {
-      setIsSaving(false);
-      setShowAlert(true);
-      setTimeout(() => { navigate('/perfil-nutriologo'); }, 4000);
-    }, 1000);
+    navigate('/perfil-nutriologo', { state: { notice: { title: 'Plan asignado', message: 'El plan quedó registrado en esta demostración.' } } });
   };
 
   // --- MANIPULACIÓN DEL ESTADO CON TIPADO ---
@@ -93,18 +86,7 @@ const CrearDieta = () => {
       <div className="min-h-screen bg-slate-50/50 p-4 relative">
         
         {/* MODAL DE ALERTA */}
-        {showAlert && (
-          <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md">
-            <div className="w-full max-w-sm transform scale-110 shadow-2xl">
-              <Alert 
-                type="success_registration"
-                title="¡Plan Asignado!"
-                message="La dieta se ha guardado correctamente en NutriCloud."
-                onClose={() => setShowAlert(false)}
-              />
-            </div>
-          </div>
-        )}
+        
 
         {/* Header Superior */}
         <header className="flex justify-between items-center mb-8">

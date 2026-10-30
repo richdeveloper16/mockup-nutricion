@@ -1,24 +1,44 @@
+﻿import { useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { CalendarDays, Scale, ClipboardCheck, ArrowRight, Leaf, Users, UserPlus, Wallet, Lightbulb, ChevronLeft, ChevronRight, MessageSquare, Utensils } from 'lucide-react';
+import type { ReactNode } from 'react';
 import DashboardLayout from '../../../components/layout/DashboardLayout';
-import { StatCard } from '../../../components/dashboard/StatCard';
+import { getRole } from '../../auth/session';
+import './dashboard.css';
 
-const DashboardPage = () => {
-  return (
-    <DashboardLayout>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <StatCard label="Pacientes" value="124" gradient="from-cyan-400 to-blue-500" />
-        <StatCard label="Citas Hoy" value="8" gradient="from-blue-500 to-indigo-500" />
-        <StatCard label="Progreso" value="+15%" gradient="from-emerald-400 to-cyan-500" />
-      </div>
-
-      <div className="bg-white rounded-[2rem] p-8 border border-blue-50 shadow-sm">
-        <h3 className="text-xl font-bold text-slate-800 mb-6">Gráfica de Pacientes</h3>
-        {/* Aquí iría tu componente de gráfica */}
-        <div className="h-64 bg-slate-50 rounded-3xl flex items-center justify-center text-slate-400">
-          Visualización de datos
-        </div>
-      </div>
-    </DashboardLayout>
-  );
-};
-
-export default DashboardPage;
+const Panel = ({ title, children, action }: { title: string; children: ReactNode; action?: ReactNode }) => <section className="nc-panel"><div className="nc-panel-title"><h2>{title}</h2>{action}</div>{children}</section>;
+const Go = ({ to, children }: { to: string; children: ReactNode }) => <Link className="nc-link" to={to}>{children}<ArrowRight size={15}/></Link>;
+const appointments = [ ['09:00', 'Ana López', 'Primera vez', 'Atendida'], ['10:00', 'Carlos Méndez', 'Seguimiento', 'En espera'], ['11:30', 'María García', 'Control', 'En espera'], ['13:00', 'Luis Ramírez', 'Seguimiento', 'Pendiente'], ['15:00', 'Daniela Ruiz', 'Primera vez', 'Pendiente'] ];
+const tips = [['Hidrátate correctamente', 'Procura tomar al menos 2 litros de agua al día.'], ['Cada paso cuenta', 'Dedica 30 minutos al día a caminar y moverte.'], ['Come con calma', 'Disfruta tus alimentos y escucha tus señales de saciedad.']];
+export default function DashboardPage() {
+  const patient = getRole() === 'paciente';
+  const [params] = useSearchParams();
+  const view = params.get('view');
+  const [tip, setTip] = useState(0);
+  const [period, setPeriod] = useState('6');
+  const [search, setSearch] = useState('');
+  const [sent, setSent] = useState(false);
+  const [message, setMessage] = useState('');
+  const [selected, setSelected] = useState<string | null>(null);
+  const chartValues = period === '6' ? [68.2, 66, 64.5, 63.6, 62.9, 62.5] : [63.6, 62.9, 62.5];
+  const points = chartValues.map((value, i) => `${60 + i * 620 / (chartValues.length - 1)},${200 - (value - 60) * 17}`).join(' ');
+  const weight = <Panel title="Evolución de tu peso" action={<select aria-label="Periodo del progreso" value={period} onChange={e => setPeriod(e.target.value)}><option value="6">Últimos 6 meses</option><option value="3">Últimos 3 meses</option></select>}><svg className="nc-chart" viewBox="0 0 720 245" role="img" aria-label={`Peso de ${chartValues[0]} a 62.5 kilogramos en ${period} meses`}><defs><linearGradient id="weight-fill" x1="0" y1="0" x2="0" y2="1"><stop stopColor="#20c88a" stopOpacity=".24"/><stop offset="1" stopColor="#20c88a" stopOpacity="0"/></linearGradient></defs>{[60,62.5,65,67.5,70].map(v => <g key={v}><line x1="60" x2="690" y1={200-(v-60)*17} y2={200-(v-60)*17} stroke="#edf2f6"/><text x="15" y={205-(v-60)*17}>{v}</text></g>)}<polygon points={`60,200 ${points} 680,200`} fill="url(#weight-fill)"/><polyline points={points} fill="none" stroke="#17bd80" strokeWidth="3"/>{chartValues.map((v,i) => <circle key={i} cx={60+i*620/(chartValues.length-1)} cy={200-(v-60)*17} r="5" fill="#17bd80"/>)}{(period === '6' ? ['May','Jun','Jul','Ago','Sep','Oct'] : ['Ago','Sep','Oct']).map((m,i,a) => <text key={m} x={60+i*620/(a.length-1)} y="232" textAnchor="middle">{m}</text>)}</svg></Panel>;
+  const plan = <Panel title="Tu plan alimenticio" action={<Go to="/dashboard?view=plan">Ver plan completo</Go>}><div className="nc-meal"><div className="nc-food"><Utensils size={42}/></div><div><h3>Plan balanceado</h3><p>Fase 2 · Pérdida de peso</p><strong>1,800 kcal/día</strong></div></div><Link className="nc-button pale" to="/dashboard?view=plan">Ver menú de la semana <ClipboardCheck size={16}/></Link></Panel>;
+  const consultation = <Panel title="Próxima consulta"><div className="nc-meal"><div className="nc-icon"><CalendarDays/></div><div><h3>03 nov. 2026</h3><p>10:00 a. m.</p></div></div><p>Consulta de seguimiento</p><p>Dra. Ana Rodríguez</p><button className="nc-button" onClick={() => setSelected('Consulta de seguimiento · 03 nov. 2026, 10:00 a. m. · Dra. Ana Rodríguez · Consultorio Central')}>Ver detalles</button></Panel>;
+  return <DashboardLayout><div className={`nc-dashboard ${patient ? 'patient' : 'employee'}`}>
+    <div className="nc-welcome"><div><span className="nc-eyebrow">{patient ? 'TU BIENESTAR, DÍA A DÍA' : 'TU CONSULTORIO, EN ORDEN'}</span><h1>¡Hola, {patient ? 'María' : 'Sofía'}!</h1><p>{patient ? 'Sigue avanzando hacia una mejor versión de ti.' : 'Aquí tienes el resumen de la agenda de hoy.'}</p></div><div className="nc-date"><CalendarDays size={20}/><div>Hoy<strong>29 oct. 2026</strong></div></div></div>
+    {patient ? <>
+      {(!view || view === 'progreso') && <><div className="nc-metrics patient-metrics"><article><span className="nc-icon"><Scale/></span><div><p>Peso actual</p><h2>62.5 <small>kg</small></h2><span className="nc-positive">↓ 2.3 kg</span><p>desde tu inicio</p></div></article><article><span className="nc-icon purple"><CalendarDays/></span><div><p>Tu próxima consulta</p><h2 className="nc-small">03 nov. 2026</h2><p>10:00 a. m.</p></div></article><article><div className="nc-ring"><span>80%</span></div><div><p>Cumplimiento del plan</p><h2>80%</h2><p>¡Vas muy bien!</p></div></article></div>{weight}</>}
+      {!view && <><div className="nc-columns">{plan}{consultation}</div><Panel title="💡 Recomendaciones para ti"><div className="nc-tip"><button aria-label="Consejo anterior" onClick={() => setTip((tip+2)%3)}><ChevronLeft/></button><div className="nc-icon"><Lightbulb/></div><div><h3>{tips[tip][0]}</h3><p>{tips[tip][1]}</p></div><button aria-label="Consejo siguiente" onClick={() => setTip((tip+1)%3)}><ChevronRight/></button></div><div className="nc-dots">{tips.map((_, i) => <button key={i} aria-label={`Consejo ${i+1}`} aria-pressed={tip === i} onClick={() => setTip(i)} className={tip === i ? 'active' : ''}/>)}</div></Panel></>}
+      {view === 'plan' && <Panel title="Mi plan alimenticio"><p>Plan balanceado · 1,800 kcal/día · Semana del 26 de octubre</p>{[['Desayuno','Avena con yogur natural, frutos rojos y nueces'],['Colación','Una manzana y 10 almendras'],['Comida','Pollo a la plancha, arroz integral y verduras'],['Colación de la tarde','Yogur natural sin azúcar'],['Cena','Ensalada de atún con aguacate y tostadas integrales']].map(([time,food]) => <div className="nc-row" key={time}><Utensils/><div><h3>{time}</h3><p>{food}</p></div></div>)}<p>Menú de demostración. Sigue el plan individual indicado por tu especialista.</p></Panel>}
+      {view === 'consultas' && consultation}
+      {view === 'documentos' && <Panel title="Mis documentos"><p>Aún no tienes documentos disponibles. Tu especialista compartirá aquí tus archivos.</p></Panel>}
+      {view === 'mensajes' && <Panel title="Mensajes a tu especialista"><form onSubmit={e => { e.preventDefault(); setSent(true); setMessage(''); }}><label htmlFor="message">Mensaje para la Dra. Ana Rodríguez</label><textarea id="message" value={message} onChange={e => {setMessage(e.target.value);setSent(false);}} required rows={4} placeholder="Escribe tu mensaje…"/><button className="nc-button">Guardar mensaje de demostración</button>{sent && <p role="status">Mensaje guardado en esta vista de demostración. No se ha enviado al consultorio.</p>}</form></Panel>}
+    </> : <>
+      <div className="nc-metrics employee-metrics">{[[CalendarDays,'Citas de hoy','8','2 pendientes','blue'],[Users,'Pacientes atendidos','5','de 8 citas','green'],[UserPlus,'Nuevos pacientes','3','en este mes','violet'],[Wallet,'Pagos del día','$1,650','5 pagos','orange']].map(([Icon,title,value,caption,color]) => {const Symbol = Icon as typeof Leaf;return <article className={String(color)} key={String(title)}><Symbol/><p>{String(title)}</p><h2>{String(value)}</h2><small>{String(caption)}</small></article>;})}</div>
+      <div className="nc-columns"><Panel title="Citas de hoy" action={<Go to="/recepcionista/nueva-cita">Ver agenda completa</Go>}><input className="nc-search" aria-label="Buscar paciente" placeholder="Buscar paciente por nombre…" value={search} onChange={e => setSearch(e.target.value)}/>{appointments.filter(row => row[1].toLocaleLowerCase().includes(search.toLocaleLowerCase())).map(([time,name,type,status],i) => <button className="nc-row nc-appointment" key={time} onClick={() => setSelected(`${name} · ${time} · ${type} · ${status}`)}><time>{time}</time><span className={`nc-avatar avatar-${i}`}>{name.split(' ').map(n => n[0]).join('')}</span><span className="nc-person"><h3>{name}</h3><p>{type}</p></span><span className={`nc-badge ${status === 'Atendida' ? 'done' : status === 'En espera' ? 'waiting' : ''}`}>{status}</span><ChevronRight size={15}/></button>)}{!appointments.some(row => row[1].toLocaleLowerCase().includes(search.toLocaleLowerCase())) && <p>No se encontraron pacientes.</p>}</Panel><Panel title="Pacientes recientes" action={<Go to="/registrar-paciente">Ver todos</Go>}>{['Sofía Torres','Javier Pérez','Laura Sánchez','Miguel Hernández'].map((name,i) => <button className="nc-row nc-appointment" key={name} onClick={() => setSelected(`${name} · Última consulta: ${28-Math.floor(i/2)} oct. 2026`)}><span className={`nc-avatar avatar-${i}`}>{name.split(' ').map(n=>n[0]).join('')}</span><span className="nc-person"><h3>{name}</h3><p>{28-Math.floor(i/2)} oct. 2026</p><p>{i%2 ? 'Seguimiento' : 'Primera vez'}</p></span><ChevronRight size={17}/></button>)}</Panel></div>
+      <div className="nc-columns"><Panel title="Acciones rápidas"><div className="nc-actions"><Link to="/registrar-paciente"><UserPlus/>Registrar paciente</Link><Link to="/recepcionista/nueva-cita"><CalendarDays/>Agendar cita</Link><Link to="/registrar-cobro"><Wallet/>Registrar pago</Link><button onClick={() => setSelected('Contacta a un paciente desde su expediente en el módulo de recepción.')}><MessageSquare/>Enviar mensaje</button></div></Panel><Panel title="Actividad reciente">{[['Nuevo paciente registrado','Sofía Torres · Hace 1 hora'],['Pago registrado','Carlos Méndez · Hace 3 horas'],['Cita reagendada','María García · Hace 6 horas'],['Plan alimenticio actualizado','Luis Ramírez · Hace 1 día']].map(([title,caption]) => <div className="nc-row" key={title}><span className="nc-activity-dot"/><div><h3>{title}</h3><p>{caption}</p></div></div>)}</Panel></div>
+    </>}
+    {selected && <div className="nc-modal-backdrop" onClick={() => setSelected(null)}><section className="nc-modal" role="dialog" aria-modal="true" aria-label="Detalles" onClick={e => e.stopPropagation()}><h2>Detalles</h2><p>{selected}</p><button autoFocus className="nc-button" onClick={() => setSelected(null)}>Cerrar</button></section></div>}
+  </div></DashboardLayout>;
+}

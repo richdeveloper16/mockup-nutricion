@@ -40,8 +40,6 @@ export interface IToastProps {
   message: string;
   /** Función que se ejecuta al cerrar la notificación */
   onClose: () => void;
-  /** Duración en milisegundos. Opcional porque tiene un valor por defecto. */
-  duration?: number;
   /** Opcional: para definir el estilo visual */
   type?: "success" | "error" | "info" | "warning" | "success_registration";
 }
